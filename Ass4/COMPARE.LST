@@ -1,0 +1,146 @@
+Turbo Assembler	 Version 2.0	    02/18/19 14:20:45	    Page 1
+compare.asm
+
+
+
+      1				     PRINT   MACRO   STR
+      2				     LEA DX,STR
+      3				     MOV AH,09H
+      4				     INT 21H
+      5				     ENDM
+      6
+      7				     ACCEPT_STR	     MACRO   STR
+      8				     LEA DX,STR
+      9				     MOV AH,0AH
+     10				     INT 21H
+     11				     ENDM
+     12
+     13				     FINISH MACRO
+     14				     MOV AH,4CH
+     15				     INT 21H
+     16				     ENDM
+     17
+     18	0000			     .MODEL SMALL
+     19	0000			     .DATA
+     20	0000  14*(24)			     STR1    DB	     20	DUP('$')
+     21	0014  00			     L1	     DB	     0
+     22	0015  14*(24)			     STR2    DB	     20	DUP('$')
+     23	0029  00			     L2	     DB	     0
+     24	002A  54 48 45 20 53 54	52+	     UNEQ    DB	     'THE STRINGS ARE UNEQUAL',10,13,'$'
+     25	      49 4E 47 53 20 41	52+
+     26	      45 20 55 4E 45 51	55+
+     27	      41 4C 0A 0D 24
+     28	0044  54 48 45 20 53 54	52+	     EQUAL   DB	     'THE STRINGS ARE EQUAL',10,13,'$'
+     29	      49 4E 47 53 20 41	52+
+     30	      45 20 45 51 55 41	4C+
+     31	      0A 0D 24
+     32	005C  0A 0D 24			     NEWLINE DB	     10,13,'$'
+     33	005F			     .CODE
+     34	0000  B8 0000s			     MOV AX,@DATA
+     35	0003  8E D8			     MOV DS,AX
+     36
+     37					     ACCEPT_STR	STR1
+1    38	0005  BA 0000r		     LEA DX,STR1
+1    39	0008  B4 0A		     MOV AH,0AH
+1    40	000A  CD 21		     INT 21H
+     41	000C  8A 3E 0001r		     MOV BH,STR1+1
+     42	0010  88 3E 0014r		     MOV [L1],BH
+     43
+     44					     PRINT NEWLINE
+1    45	0014  BA 005Cr		     LEA DX,NEWLINE
+1    46	0017  B4 09		     MOV AH,09H
+1    47	0019  CD 21		     INT 21H
+     48
+     49					     ACCEPT_STR	STR2
+1    50	001B  BA 0015r		     LEA DX,STR2
+1    51	001E  B4 0A		     MOV AH,0AH
+1    52	0020  CD 21		     INT 21H
+     53	0022  8A 3E 0016r		     MOV BH,STR2+1
+     54	0026  88 3E 0029r		     MOV [L2],BH
+     55
+     56					     PRINT NEWLINE
+1    57	002A  BA 005Cr		     LEA DX,NEWLINE
+Turbo Assembler	 Version 2.0	    02/18/19 14:20:45	    Page 2
+compare.asm
+
+
+
+1    58	002D  B4 09		     MOV AH,09H
+1    59	002F  CD 21		     INT 21H
+     60
+     61	0031  8A 2E 0014r		     MOV CH,L1
+     62	0035  8A 0E 0029r		     MOV CL,L2
+     63	0039  3A E9			     CMP CH,CL
+     64	003B  75 21			     JNE UNEQUAL
+     65
+     66	003D  B5 00			     MOV CH,0
+     67	003F  BE 0000			     MOV SI,0
+     68
+     69	0042				     L:
+     70	0042  8A A4 0000r			     MOV AH,[STR1+SI]
+     71	0046  8A 84 0015r			     MOV AL,[STR2+SI]
+     72	004A  3A E0				     CMP AH,AL
+     73	004C  75 10				     JNE UNEQUAL
+     74	004E  46				     INC SI
+     75	004F  3B F1				     CMP SI, CX
+     76	0051  75 EF				     JNE L
+     77					     PRINT EQUAL
+1    78	0053  BA 0044r		     LEA DX,EQUAL
+1    79	0056  B4 09		     MOV AH,09H
+1    80	0058  CD 21		     INT 21H
+     81					     FINISH
+1    82	005A  B4 4C		     MOV AH,4CH
+1    83	005C  CD 21		     INT 21H
+     84
+     85	005E				     UNEQUAL:
+     86						     PRINT   UNEQ
+1    87	005E  BA 002Ar		     LEA DX,UNEQ
+1    88	0061  B4 09		     MOV AH,09H
+1    89	0063  CD 21		     INT 21H
+     90						     FINISH
+1    91	0065  B4 4C		     MOV AH,4CH
+1    92	0067  CD 21		     INT 21H
+     93				     END
+Turbo Assembler	 Version 2.0	    02/18/19 14:20:45	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/18/19"
+??FILENAME			  Text	 "compare "
+??TIME				  Text	 "14:20:44"
+??VERSION			  Number 0200
+@CODE				  Text	 _TEXT
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 COMPARE
+@MODEL				  Text	 2
+@WORDSIZE			  Text	 2
+EQUAL				  Byte	 DGROUP:0044
+L				  Near	 _TEXT:0042
+L1				  Byte	 DGROUP:0014
+L2				  Byte	 DGROUP:0029
+NEWLINE				  Byte	 DGROUP:005C
+STR1				  Byte	 DGROUP:0000
+STR2				  Byte	 DGROUP:0015
+UNEQ				  Byte	 DGROUP:002A
+UNEQUAL				  Near	 _TEXT:005E
+
+Macro Name
+
+ACCEPT_STR
+FINISH
+PRINT
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  005F Word	  Public  DATA
+_TEXT				  16  0069 Word	  Public  CODE
+
