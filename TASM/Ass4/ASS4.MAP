@@ -1,0 +1,19 @@
+
+ Start  Stop   Length Name               Class
+
+ 00000H 00165H 00166H _TEXT              CODE
+ 00166H 00296H 00131H _DATA              DATA
+
+  Address         Publics by Name
+
+ 0000:00F9       COMPARE
+ 0000:0079       CONCAT
+
+  Address         Publics by Value
+
+ 0000:0079       CONCAT
+ 0000:00F9       COMPARE
+
+Program entry point at 0000:0000
+Warning: No stack
+
